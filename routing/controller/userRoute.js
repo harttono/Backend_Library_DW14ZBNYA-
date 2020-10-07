@@ -88,7 +88,6 @@ exports.login = async (req,res) =>{
 }
 
 // generate admin
-
 exports.createAdmin = async (req,res) =>{
     try{
         const adminData = {
@@ -141,7 +140,6 @@ exports.getUsers = async(req,res) =>{
 }
 
 // delete User
-
 exports.deleteUser = async(req,res) =>{
     try{
         const {id} = req.params;
