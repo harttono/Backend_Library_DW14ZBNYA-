@@ -118,6 +118,51 @@ exports.createAdmin = async (req,res) =>{
             message:`error ${err}`
         })
     }
-
 }
 
+// Get  Users
+exports.getUsers = async(req,res) =>{
+    try{
+        const users = await User.findAll({
+            attributes:{
+                exclude:['gender','role','isAdmin','picture','createdAt','updatedAt']
+            }
+        });
+        if(users){
+            return res.send({
+                data:users
+            })
+        }
+    }catch(err){
+            res.status(500).send({
+                message:`error ${err}`
+            })
+    }
+}
+
+// delete User
+
+exports.deleteUser = async(req,res) =>{
+    try{
+        const {id} = req.params;
+        const deletedUser = await User.destroy({
+            where:{
+                id
+            }
+        })
+        if(deletedUser){
+            res.send({
+                message:`User with Id ${id} has been deleted successfully !`,
+                data:id
+            })
+        }else{
+            res.status(404).send({
+                message:`User with Id ${id} not found.`
+            })
+        }
+    }catch(err){
+        res.status(500).send({
+            message:`error ${err}`
+        })
+    }
+}
