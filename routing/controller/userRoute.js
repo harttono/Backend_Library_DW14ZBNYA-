@@ -1,6 +1,6 @@
 const {User}   = require('../../models');
 const bycypt = require('bcrypt');
-const generateToken = require('../../utils/auth');
+const {getToken} = require('../../utils/auth');
 
 // Register User
 exports.register = async (req,res) =>{
@@ -31,7 +31,7 @@ exports.register = async (req,res) =>{
                         message:'Your data has been saved successfully !',
                         data:{
                             email:newUser.email,
-                            token:generateToken.getToken(newUser)
+                            token:getToken(newUser)
                         }
                     })
                 }else{
@@ -46,11 +46,78 @@ exports.register = async (req,res) =>{
             })
         }
     }catch(err){
-        res.send({
+        res.status(500).send({
             message:`error ${err}`
         })
     }
 }
 
 // Login 
+exports.login = async (req,res) =>{
+    try{
+        const{email,password} = req.body;
+        const signInUser = await User.findOne({
+            where:{
+                email
+            }
+        })
+        if(signInUser){
+            if(bycypt.compareSync(password,signInUser.password)){
+                res.send({
+                    message:`You've logged in successfully !`,
+                    data:{
+                        email:signInUser.email,
+                        token:getToken(signInUser)
+                    }
+                })
+            }else{
+                return res.status(401).send({
+                    message:'Invalid Passoword.'
+                })
+            }
+        }else{
+            return res.status(401).send({
+                message:'Invalid username or password.'
+            })
+        }
+    }catch(err){
+        res.status(500).send({
+            message:`error ${err}`
+        })
+    }
+}
+
+// generate admin
+
+exports.createAdmin = async (req,res) =>{
+    try{
+        const adminData = {
+            email:"harttonz@gmail.com",
+            password:"123",
+            fullname:"harttonz",
+            gender:"male",
+            phone:"089533201888",
+            address:"pemalang",
+            role:"Admin",
+            isAdmin:1,
+            picture:'http://localhost:4000/profile/account.png'
+        }
+        bycypt.hash(adminData.password,10,async(err,hash)=>{
+            adminData.password = hash;
+            const newAdmin = await User.create(adminData);
+            if(newAdmin){
+                res.send({admin:newAdmin})
+            }else{
+                res.status(401).send({
+                    message:'Invalid Admin Data.'
+                })
+            }
+        })
+    }catch(err){
+        res.status(500).send({
+            message:`error ${err}`
+        })
+    }
+
+}
 
