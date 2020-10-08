@@ -99,7 +99,7 @@ exports.createAdmin = async (req,res) =>{
             address:"pemalang",
             role:"Admin",
             isAdmin:1,
-            picture:'http://localhost:4000/profile/account.png'
+            picture:'http://localhost:5000/profile/account.png'
         }
         bycypt.hash(adminData.password,10,async(err,hash)=>{
             adminData.password = hash;
@@ -124,7 +124,7 @@ exports.getUsers = async(req,res) =>{
     try{
         const users = await User.findAll({
             attributes:{
-                exclude:['gender','role','isAdmin','picture','createdAt','updatedAt']
+                exclude:['password','role','isAdmin','picture','createdAt','updatedAt']
             }
         });
         if(users){
