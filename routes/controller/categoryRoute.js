@@ -46,14 +46,18 @@ exports.addCategory = async(req,res) =>{
     try{
     const {name} =req.body;
     const data = {name}
-    const savedCategory = await Category.create(data,{
-        attributes:['id','name']
-    });
+    const savedCategory = await Category.create(data);
     if(savedCategory){
-        res.send({
-            message:`category data has been created successfully.`,
-            data:savedCategory
+        const showCategory = await Category.findOne({
+            where:{name:name},
+            attributes:['id','name']
         })
+        if(showCategory){
+            res.send({
+                message:`category data has been created successfully.`,
+                data:showCategory
+            })
+        }
     }else{
         res.status(404).send({
             message:'no data to be saved.'
@@ -104,9 +108,8 @@ exports.deleteCategory = async(req,res) =>{
         where:{id}
     })
     if(DeletedCategory){
-        res.send({
+        res.status(200).send({
             message:`Data with Id ${id} has been deleted.`,
-            data:id
         })
     }
    }catch(err){

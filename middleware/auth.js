@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const {secretKey} = require('./secretKey');
+const {SECRET_KEY} = require('./config');
 
 exports.getToken = (user) => {
     return jwt.sign({
@@ -7,15 +7,15 @@ exports.getToken = (user) => {
         fullname:user.fullname,
         email:user.email,
         isAdmin:user.isAdmin
-    },secretKey,{
+    },SECRET_KEY,{
         expiresIn:'24h'
     })
 }
 
 exports.isAuth = (req,res,next) =>{
-    const token = req.headers.authorization;
-    if(token){
-        jwt.verify(token,secretKey,(err,decode) =>{
+    const token = req.headers.authorization || req.headers.replace ;
+    if(token){ 
+        jwt.verify(token,SECRET_KEY,(err,decode) =>{
             if(err){
                 return res.status(401).send({
                     message:'Invalid token'
@@ -27,7 +27,16 @@ exports.isAuth = (req,res,next) =>{
         })
     }else{
         return res.status(401).send({
-            message:`token isn't supplied.`
+            message:`Access Denied.`
         })
     }
+}
+
+exports.isAdmin = (req,res,next) =>{
+      if(req.user && req.user.isAdmin){
+          return next()
+      }
+      return res.status(401).send({
+          message:`restricted access,only admin allowed.`
+      })
 }

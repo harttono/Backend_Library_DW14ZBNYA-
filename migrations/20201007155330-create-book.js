@@ -11,10 +11,13 @@ module.exports = {
       title: {
         type: Sequelize.STRING
       },
+      author:{
+        type: Sequelize.STRING
+      },
       publication: {
         type: Sequelize.DATE
       },
-      categoryId: {
+      category: {
         type: Sequelize.INTEGER,
         allowNull:false,
         references:{
@@ -24,7 +27,7 @@ module.exports = {
         onUpdate:"cascade",
         onDelete:"cascade"
       },
-      userId: {
+      user: {
         type: Sequelize.INTEGER,
         allowNull:false,
         references:{
@@ -45,6 +48,9 @@ module.exports = {
       },
       file: {
         type: Sequelize.STRING
+      },
+      cover:{
+        type:Sequelize.STRING
       },
       status: {
         type: Sequelize.STRING
