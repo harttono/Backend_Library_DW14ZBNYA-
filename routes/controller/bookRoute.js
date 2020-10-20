@@ -1,5 +1,5 @@
 const {Book,Category,User} = require('../../models');
-const {Op} = require('sequelize')
+
 
 // Add Book 
 exports.add_Book = async(req,res) =>{
@@ -78,12 +78,12 @@ exports.detail_Book = async(req,res) =>{
 
         if(GetDetailBook){
             res.status(200).send({
-                message:`Your book with id ${id} has been updated successfully.`,
+                message:`Your book ${id} has loaded sucessfully.`,
                 data:GetDetailBook
             })
         }else{
             res.status(400).send({
-                message:`Your book with Id ${id} has been deleted.`,
+                message:`Book with Id ${id} is not found.`,
             })
         }
   
