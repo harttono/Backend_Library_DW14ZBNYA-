@@ -1,12 +1,12 @@
 {
-  "name": "libraryBackend",
+  "name": "librarybackend",
   "version": "1.0.0",
-  "description": "",
+  "description":"",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js"
   },
-  "author": "",
+  "author":"suhartono",
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
